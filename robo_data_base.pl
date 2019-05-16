@@ -35,11 +35,6 @@ retirar_elemento(Elem,[Cabeca|Cauda],[Cabeca|Resultado]) :- retirar_elemento(Ele
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % formato dos estados
 % [R, N, S, C, M, L, P, E, Pw]
-solucao([Robo, S_acumulada, Sujeiras, Contador, [Mx, My]|Cauda], Solucao) :- 
-	Mx * My * Contador =< 100, solucao_bl([Robo, S_acumulada, Sujeiras, Contador, [Mx, My]|Cauda], Solucao).
-solucao([Robo, S_acumulada, Sujeiras, Contador, [Mx, My]|Cauda], Solucao) :- 
-	Mx * My * Contador > 100, solucao_bp([Robo, S_acumulada, Sujeiras, Contador, [Mx, My]|Cauda], Solucao).
-
 anda_lado(Rx, NRx, Max) :- NRx is (Rx + 1), NRx < Max.
 anda_lado(Rx, NRx, _) :- NRx is (Rx - 1), NRx >= 0.
 

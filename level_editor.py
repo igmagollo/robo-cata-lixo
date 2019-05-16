@@ -5,8 +5,12 @@ from State import State
 import ast
 
 def run(initial_state):
-	bashCommand = "swipl -s robo_data_base.pl -g 'solucao(" + str(initial_state) + ", X), write(X),halt' > result.txt"
+	if initial_state[4][0] * initial_state[4][1] * initial_state[3] <= 100:
+		bashCommand = "swipl -s robo_data_base.pl -g 'solucao_bl(" + str(initial_state) + ", X), write(X),halt' > result.txt"
+	else:
+		bashCommand = "swipl -s robo_data_base.pl -g 'solucao_bp(" + str(initial_state) + ", X), write(X),halt' > result.txt"
 	os.system(bashCommand)
+	solution = "fail"
 	f = open("./result.txt","r")
 	try:
 		solution = ast.literal_eval(f.read())
@@ -17,10 +21,15 @@ def run(initial_state):
 
 x, y = input("X Y: ").split()
 x, y = int(x), int(y)
+initial_state = input("Estado inicial: ")
 scale = 600 // max(x,y)
-initial_state = State(scale=scale)
-initial_state.setMapa(x,y)
-delay = 100
+if initial_state != '':
+	initial_state = ast.literal_eval(initial_state)
+	initial_state = State(scale, initial_state)
+else:
+	initial_state = State(scale=scale)
+	initial_state.setMapa(x,y)
+delay = int(input("Delay: "))
 
 pygame.init()
 size = width, heith = scale * x, scale * y
@@ -95,8 +104,9 @@ while 1:
 				if not atual and not function and not remove:
 					if not compiled:
 						editable = False
+						solution = run(initial_state.getState())
 						try:
-							solution = run(initial_state.getState())
+							
 							states = [State(scale, a) for a in solution]
 						except:
 							print("error")
@@ -113,6 +123,7 @@ while 1:
 
 							pygame.mixer.music.stop()
 							sys.exit()
+						print("compilado")
 						compiled = True
 					else:
 						running = True
